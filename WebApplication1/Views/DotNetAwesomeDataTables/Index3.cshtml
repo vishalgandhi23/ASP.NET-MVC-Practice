@@ -1,0 +1,103 @@
+﻿
+@{
+    ViewBag.Title = "Index3";
+}
+
+<h2>implement custom multicolumn server-side filtering in jQuery dataTables</h2>
+<div style="width:90%; margin:0 auto">
+    @* Search Area *@
+    <div style="background-color:#f5f5f5; padding:20px">
+        <h2>Search Panel</h2>
+        <table>
+            <tbody>
+                <tr>
+                    <td>Contact Name</td>
+                    <td><input type="text" id="txtContactName" /></td>
+                    <td>Country</td>
+                    <td>
+                        <select id="ddState" style="width:200px">
+                            <option value="">All States</option>
+                            <option value="Gujarat">Gujarat</option>
+                            <option value="Maharashtra">Maharashtra</option>
+                            <option value="Karnatak">Karnatak</option>
+                        </select>
+                        @* Here I have made this select box with some static data for make this example simpler.
+                            You can fill it from database data *@
+                    </td>
+                    <td>
+                        <input type="button" value="Search" id="btnSearch" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    @* jQuery DataTables *@
+    <div>
+        <table id="contactsTable">
+            <thead>
+                <tr>
+                    <td>First Name</td>
+                    <td>Last Name</td>
+                    <td>Email</td>
+                    <td>Primary Phone</td>
+                    <td>Secondary Phone</td>
+                    <td>Birth Date</td>
+                    <td>City</td>
+                    <td>State</td>
+                    <td>Zipcode</td>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+<link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+@section Scripts{
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#contactsTable').DataTable({
+
+                processing: true, // For showing progress bar
+                serverSide: true, // For process server side
+                filter: true,
+                orderMulti: false, // Now we can sort one column at a time
+                dom: '<"top"i>rt<"bottom"lp><"clear">', // for hide default global search box // little confusion? don't worry I explained in the tutorial website
+
+                ajax: {
+                    url: "/DotNetAwesomeDataTables/GetContactsServersidePagingSortingFiltering",
+                    type: "POST",
+                    datatype: "json"
+                    //"dataSrc": ""
+                },
+                "columns": [
+                    { data: "FirstName", name: "FirstName", "autoWidth": true },
+                    { data: "LastName", name: "LastName", "autoWidth": true },
+                    { data: "Email", name: "Email", "autoWidth": true },
+                    { data: "PhonePrimary", name: "PhonePrimary", "autoWidth": true },
+                    { data: "PhoneSecondary", name: "PhoneSecodary", "autoWidth": true },
+                    { data: "Birthday", name: "Birthday", "autoWidth": true },
+                    { data: "City", name: "City", "autoWidth": true },
+                    { data: "State", name: "State", "autoWidth": true },
+                    { data: "Zip", name: "Zip", "autoWidth": true }
+                ]
+            });
+
+            oTable = $('#contactsTable').DataTable();
+            $('#btnSearch').click(function () {
+                //Apply search for Employee Name // DataTable column index 0
+                oTable.columns(0).search($('#txtContactName').val().trim());
+                //Apply search for Country // DataTable column index 3
+                oTable.columns(7).search($('#ddState').val().trim());
+                //hit search on server
+                oTable.draw();
+            });
+        });
+    </script>
+}
+
+
+
+

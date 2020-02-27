@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Jquery DataTables Client side processing</h2>
+
+<table id="contactsTable">
+    <thead>
+        <tr>
+            <td>First Name</td>
+            <td>Last Name</td>
+            <td>Email</td>
+            <td>Primary Phone</td>
+            <td>Secondary Phone</td>
+            <td>Birth Date</td>
+            <td>City</td>
+            <td>State</td>
+            <td>Zipcode</td>
+        </tr>
+    </thead>
+</table>
+
+<link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+@section Scripts{
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#contactsTable').DataTable({
+                ajax: {
+                    url: "/DotNetAwesomeDataTables/GetContacts",
+                    type: "GET",
+                    datatype: "json",
+                    //"dataSrc": ""
+                },
+                "columns": [
+                    { data: "FirstName" },
+                    { data: "LastName" },
+                    { data: "Email" },
+                    { data: "PhonePrimary" },
+                    { data: "PhoneSecondary" },
+                    { data: "Birthday" },
+                    { data: "City" },
+                    { data: "State" },
+                    { data: "Zip" }
+                ]
+            });
+        });
+    </script>
+}
+

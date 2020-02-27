@@ -1,0 +1,85 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Jquery DataTables Client side processing (Web API)</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<table id="ContactsTable">
+    <thead>
+        <tr>
+            <td>Id</td>
+            <td>First Name</td>
+            <td>Last Name</td>
+            <td>Email</td>
+            <td>Primary Phone</td>
+            <td>Secondary Phone</td>
+            <td>Birth Date</td>
+            <td>Address Line 1</td>
+            <td>Address Line 2</td>
+            <td>City</td>
+            <td>State</td>
+            <td>Zipcode</td>
+        </tr>
+    </thead>
+</table>
+
+<link href="~/Content/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+@section Scripts{
+    
+    <script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#ContactsTable').DataTable({
+                //processing: true, // for show progress bar
+                //serverSide: true, // for process server side
+                //ordering: false,
+                //paging: false,
+                //searching: false,
+                ajax: {
+                    url: "http://localhost:64783/api/GetContacts",
+                    type: "GET",
+                    datatype: "json",
+                    dataSrc: ""
+                },
+                columnDefs: [
+                    {
+                        "targets": [0],
+                        "visible": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [7],
+                        "visible": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [8],
+                        "visible": false,
+                        "searchable": false
+                    }
+                ],
+                columns: [
+                    { data: "Id"},
+                    { data: "FirstName" },
+                    { data: "LastName" },
+                    { data: "Email" },
+                    { data: "PhonePrimary" },
+                    { data: "PhoneSecondary" },
+                    { data: "Birthday" },
+                    { data: "StreetAddress1" },
+                    { data: "StreetAddress2" },
+                    { data: "City" },
+                    { data: "State" },
+                    { data: "Zip" }
+                ]
+            });
+        });
+    </script>
+}

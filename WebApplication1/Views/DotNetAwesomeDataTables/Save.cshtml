@@ -1,0 +1,69 @@
+﻿@model WebApplication1.Contact
+<h2>Save</h2>
+@using (Html.BeginForm("save", "DotNetAwesomeDataTables", FormMethod.Post, new { id = "popupForm" }))
+{
+    if (Model != null && Model.Id > 0)
+    {
+        @Html.HiddenFor(a => a.Id)
+    }
+
+    <div class="form-group">
+        <label>First Name</label>
+        @Html.TextBoxFor(a => a.FirstName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(a => a.FirstName)
+    </div>
+    <div class="form-group">
+        <label>Last Name</label>
+        @Html.TextBoxFor(a => a.LastName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(a => a.LastName)
+    </div>
+    <div class="form-group">
+        <label>Email</label>
+        @Html.TextBoxFor(a => a.Email, new { @class = "form-control" })
+        @Html.ValidationMessageFor(a => a.Email)
+    </div>
+    <div class="form-group">
+        <label>Primary Phone</label>
+        @Html.TextBoxFor(a => a.PhonePrimary, new { @class = "form-control" })
+        @Html.ValidationMessageFor(a => a.PhonePrimary)
+    </div>
+    <div class="form-group">
+        <label>Secondary Phone</label>
+        @Html.TextBoxFor(a => a.PhoneSecondary, new { @class = "form-control" })
+        @Html.ValidationMessageFor(a => a.PhoneSecondary)
+    </div>
+    <div class="form-group">
+        <label>Birthdate</label>
+        @Html.TextBoxFor(a => a.Birthday, new { @class = "form-control" })
+        @Html.ValidationMessageFor(a => a.Birthday)
+    </div>
+    <div class="form-group">
+        <label>Address1</label>
+        @Html.TextBoxFor(a => a.StreetAddress1, new { @class = "form-control" })
+        @Html.ValidationMessageFor(a => a.StreetAddress1)
+    </div>
+    <div class="form-group">
+        <label>Address2</label>
+        @Html.TextBoxFor(a => a.StreetAddress2, new { @class = "form-control" })
+        @Html.ValidationMessageFor(a => a.StreetAddress2)
+    </div>
+    <div class="form-group">
+        <label>City</label>
+        @Html.TextBoxFor(a => a.City, new { @class = "form-control" })
+        @Html.ValidationMessageFor(a => a.City)
+    </div>
+    <div class="form-group">
+        <label>Country</label>
+        @Html.TextBoxFor(a => a.State, new { @class = "form-control" })
+        @Html.ValidationMessageFor(a => a.State)
+    </div>
+    <div class="form-group">
+        <label>Zipcode</label>
+        @Html.TextBoxFor(a => a.Zip, new { @class = "form-control" })
+        @Html.ValidationMessageFor(a => a.Zip)
+    </div>
+
+    <div>
+        <input type="submit" value="Save" />
+    </div>
+}

@@ -1,0 +1,59 @@
+﻿
+@{
+    ViewBag.Title = "Index2";
+}
+
+<h2>jQuery Datatable server side pagination and sorting in ASP.NET MVC application</h2>
+
+<table id="contactsTable">
+    <thead>
+        <tr>
+            <td>First Name</td>
+            <td>Last Name</td>
+            <td>Email</td>
+            <td>Primary Phone</td>
+            <td>Secondary Phone</td>
+            <td>Birth Date</td>
+            <td>City</td>
+            <td>State</td>
+            <td>Zipcode</td>
+        </tr>
+    </thead>
+</table>
+
+<link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+@section Scripts{
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#contactsTable').DataTable({
+
+                processing: true, // For showing progress bar
+                serverSide: true, // For process server side
+                filter: false, // For disabling filter (search box)
+                orderMulti: false, // Now we can sort one column at a time
+
+                ajax: {
+                    url: "/DotNetAwesomeDataTables/GetContactsServersidePagingSorting",
+                    type: "POST",
+                    datatype: "json"
+                    //"dataSrc": ""
+                },
+                "columns": [
+                    { data: "FirstName", name: "FirstName" },
+                    { data: "LastName", name: "LastName" },
+                    { data: "Email", name: "Email" },
+                    { data: "PhonePrimary", name: "PhonePrimary" },
+                    { data: "PhoneSecondary", name: "PhoneSecodary" },
+                    { data: "Birthday", name: "Birthday" },
+                    { data: "City", name: "City" },
+                    { data: "State", name: "State" },
+                    { data: "Zip", name: "Zip" }
+                ]
+            });
+        });
+    </script>
+}
+

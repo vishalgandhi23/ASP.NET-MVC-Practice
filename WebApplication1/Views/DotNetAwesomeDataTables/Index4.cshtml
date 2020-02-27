@@ -1,0 +1,199 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Full CRUD operation using datatables in ASP.NET MVC</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+    <style>
+        span.field-validation-error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div style="width:90%; margin:0 auto" class="tablecontainer">
+        <a class="popup btn btn-primary" href="/DotNetAwesomeDataTables/save/0" style="margin-bottom:20px; margin-top:20px;">Add New Contact</a>
+        <table id="ContactsDataTable">
+            <thead>
+                <tr>
+                    <th>ContactId</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Primary Phone</th>
+                    <th>Secondary Phone</th>
+                    <th>Birth Date</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Zipcode</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+    <script src="~/Scripts/jquery-1.12.4.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            var oTable = $("#ContactsDataTable").DataTable({
+
+                "processing": true, // for show progress bar
+                "serverSide": true, // for process server side
+                "filter": true, // this is for disable filter (search box)
+                "orderMulti": false, // for disable multiple column at once
+                //"pageLength": 5,
+
+                "ajax": {
+                    "url": "/DotNetAwesomeDataTables/LoadData",
+                    "type": "POST",
+                    "datatype": "json"
+                },
+
+                "columnDefs":
+                [
+                    {
+                        "targets": [0],
+                        "visible": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [4],
+                        "searchable": false,
+                        "orderable": false
+                    },
+                    {
+                        "targets": [5],
+                        "searchable": false,
+                        "orderable": false
+                    },
+                    {
+                        "targets": [6],
+                        "searchable": false,
+                        "orderable": true
+                    },
+                    {
+                        "targets": [10],
+                        "searchable": false,
+                        "orderable": false
+                    },
+                    {
+                        "targets": [11],
+                        "searchable": false,
+                        "orderable": false
+                    }
+                ],
+
+                "columns": [
+                    { data: "Id", name: "Id", "autoWidth": true },
+                    { data: "FirstName", name: "FirstName", "autoWidth": true },
+                    { data: "LastName", name: "LastName", "autoWidth": true },
+                    { data: "Email", name: "Email", "autoWidth": true },
+                    { data: "PhonePrimary", name: "PhonePrimary", "autoWidth": true },
+                    { data: "PhoneSecondary", name: "PhoneSecodary", "autoWidth": true },
+                    { data: "Birthday", name: "Birthday", "autoWidth": true },
+                    { data: "City", name: "City", "autoWidth": true },
+                    { data: "State", name: "State", "autoWidth": true },
+                    { data: "Zip", name: "Zip", "autoWidth": true },
+                    {
+                        data: "Id", "width": "50px", render: function (data) {
+                            return '<a class="popup" href="/DotNetAwesomeDataTables/save/' + data + '">Edit</a>';
+                        }
+                    },
+                    {
+                        data: "Id", "width": "50px", render: function (data) {
+                            return '<a class="popup" href="/DotNetAwesomeDataTables/delete/' + data + '">Delete</a>';
+                        }
+                    }
+                ]
+
+            });
+
+            $('.tablecontainer').on('click', 'a.popup', function (e) {
+                e.preventDefault();
+                OpenPopup($(this).attr('href'));
+            })
+
+            function OpenPopup(pageUrl) {
+                var $pageContent = $('<div/>');
+                $pageContent.load(pageUrl, function () {
+                    $('#popupForm', $pageContent).removeData('validator');
+                    $('#popupForm', $pageContent).removeData('unobtrusiveValidation');
+                    $.validator.unobtrusive.parse('form');
+
+                });
+
+                $dialog = $('<div class="popupWindow" style="overflow:auto"></div>')
+                    .html($pageContent)
+                    .dialog({
+                        draggable: false,
+                        autoOpen: false,
+                        resizable: false,
+                        model: true,
+                        title: 'Popup Dialog',
+                        height: 550,
+                        width: 600,
+                        close: function () {
+                            $dialog.dialog('destroy').remove();
+                        }
+                    })
+
+                $('.popupWindow').on('submit', '#popupForm', function (e) {
+                    var url = $('#popupForm')[0].action;
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: $('#popupForm').serialize(),
+                        success: function (data) {
+                            if (data.status) {
+                                $dialog.dialog('close');
+                                oTable.ajax.reload();
+                            }
+                        }
+                    })
+
+                    e.preventDefault();
+                })
+                $dialog.dialog('open');
+            }
+
+        });
+
+        //function DeleteData(ContactID) {
+        //    if (confirm("Are you sure you want to delete ...?")) {
+        //        Delete(ContactID);
+        //    }
+        //    else {
+        //        return false;
+        //    }
+        //}
+
+        //function Delete(ContactID) {
+        //    var url = "/DataTablesCrud/DeleteContact";
+        //    $.post(url, { ID: ContactID }, function (data) {
+        //        if (data == "Deleted") {
+        //            alert("Delete Cusomer !");
+        //            oTable = $('#demoGrid').DataTable();
+        //            oTable.draw();
+        //        }
+        //        else {
+        //            alert("Something Went Wrong!");
+        //        }
+        //    });
+        //}
+
+    </script>
+
+</body>
+</html>

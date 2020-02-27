@@ -1,0 +1,65 @@
+﻿@model WebApplication1.Contact
+
+<h2>Delete Contact</h2>
+@using (Html.BeginForm("delete", "DotNetAwesomeDataTables", FormMethod.Post, new { id = "popupForm" }))
+{
+    @Html.HiddenFor(a => a.Id)
+    <div class="form-group">
+        <label>First Name</label>
+        <p>@Model.FirstName</p>
+    </div>
+
+    <div class="form-group">
+        <label>Last Name</label>
+        <p>@Model.LastName</p>
+    </div>
+
+    <div class="form-group">
+        <label>Email</label>
+        <p>@Model.Email</p>
+    </div>
+
+    <div class="form-group">
+        <label>Primary Phone</label>
+        <p>@Model.PhonePrimary</p>
+    </div>
+
+    <div class="form-group">
+        <label>Secodary Phone</label>
+        <p>@Model.PhoneSecondary</p>
+    </div>
+
+    <div class="form-group">
+        <label>Brithdate</label>
+        <p>@Model.Birthday</p>
+    </div>
+
+    <div class="form-group">
+        <label>Address1</label>
+        <p>@Model.StreetAddress1</p>
+    </div>
+
+    <div class="form-group">
+        <label>Address2</label>
+        <p>@Model.StreetAddress2</p>
+    </div>
+
+    <div class="form-group">
+        <label>City</label>
+        <p>@Model.City</p>
+    </div>
+
+    <div class="form-group">
+        <label>State</label>
+        <p>@Model.State</p>
+    </div>
+
+    <div class="form-group">
+        <label>Zipcode</label>
+        <p>@Model.Zip</p>
+    </div>
+
+    <div>
+        <input type="submit" value="Delete" />
+    </div>
+}
